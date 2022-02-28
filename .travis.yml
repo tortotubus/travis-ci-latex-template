@@ -1,0 +1,37 @@
+language: generic
+dist: xenial
+addons:
+  apt:
+    sources:
+    - sourceline: ppa:opencpu/imagemagick
+    packages:
+    - libmagick++-dev
+
+install:
+- source ./texlive/texlive_install.sh
+cache:
+  directories:
+  - "/tmp/texlive"
+  - "$HOME/.texlive"
+before_script: cd $TRAVIS_BUILD_DIR/src/
+script:
+- texliveonfly notes.tex homework.tex
+- latexmk -pdf notes.tex homework.tex
+deploy:
+  - provider: releases
+    token:
+      secure: gIWUQRnfYrHOkYm5jF/WpChdHi5sBJ3zfw0dbor6XgGrssx1dUd/f6hpDMTIJkk9oGLos440Z4SynYXOZnwDw2WQXJm4Lo3coRYg6+lJ/POrHQcCsCktL6+wThrTJvjxbx5I87XdWdXDfCXuNsa2RL+DiuJ3Xaj8E/OQB4ikWGXkvhW9J3ZmT8mMrimt2zJndDIoAbUd/PAAYPMIn1CzVjGc1I5vP516tKbfDW2Eo65vNkbDptgkNvf7vweTkPY5y2ZtXbxZArPQZrpt5VtyYhSJy77yFBJzerjDPevWXnlHyvwvSYpx5g2UBI66VKBn6kQjVdAnv2fP85zA4Gtq8WgQ8876iX1tt20Gzp8itZ5ZUn7hoZMjP4pLPEs0ANVg1qBCUVE7KH9WbUotUhK4EOK4IgtTcbXpZOMRFAxPTaqycPFT7JePJ5NhjaPSp+HmzNuWsBq3ttYsVBOfQ06l8f3JGyyM/EWHyEZz2z5i9LL7hhdWAF/J77m07FB1qmkIPhuk2H9+FyBZWlZo3G4Ka7cFStk3SJepTCnAxeteWXQXJOcyoGI0/wZ4VvBDMJ5sezoP3CwOptp9QN2DIhS8fPImVTUv03EfDduxO1KIT9e1RLULv/hicpp+wMAyq9OT1lraxtIxNdcAkLxq0SfWEs29W8kWlBJDCg7R/EEAfck=
+    file: 
+      - "./notes.pdf"
+      - "./homework.pdf"
+    on:
+      tags: true
+    edge: true
+  - provider: pages
+    skip_cleanup: true
+    keep_history: true
+    target_branch: gh-pages
+    token:
+      secure: gIWUQRnfYrHOkYm5jF/WpChdHi5sBJ3zfw0dbor6XgGrssx1dUd/f6hpDMTIJkk9oGLos440Z4SynYXOZnwDw2WQXJm4Lo3coRYg6+lJ/POrHQcCsCktL6+wThrTJvjxbx5I87XdWdXDfCXuNsa2RL+DiuJ3Xaj8E/OQB4ikWGXkvhW9J3ZmT8mMrimt2zJndDIoAbUd/PAAYPMIn1CzVjGc1I5vP516tKbfDW2Eo65vNkbDptgkNvf7vweTkPY5y2ZtXbxZArPQZrpt5VtyYhSJy77yFBJzerjDPevWXnlHyvwvSYpx5g2UBI66VKBn6kQjVdAnv2fP85zA4Gtq8WgQ8876iX1tt20Gzp8itZ5ZUn7hoZMjP4pLPEs0ANVg1qBCUVE7KH9WbUotUhK4EOK4IgtTcbXpZOMRFAxPTaqycPFT7JePJ5NhjaPSp+HmzNuWsBq3ttYsVBOfQ06l8f3JGyyM/EWHyEZz2z5i9LL7hhdWAF/J77m07FB1qmkIPhuk2H9+FyBZWlZo3G4Ka7cFStk3SJepTCnAxeteWXQXJOcyoGI0/wZ4VvBDMJ5sezoP3CwOptp9QN2DIhS8fPImVTUv03EfDduxO1KIT9e1RLULv/hicpp+wMAyq9OT1lraxtIxNdcAkLxq0SfWEs29W8kWlBJDCg7R/EEAfck=
+    on:
+      branch: main
